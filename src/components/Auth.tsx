@@ -13,7 +13,7 @@ export function Auth() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const [isRegister, setIsRegister] = useState(false)
+  const isRegister = false;
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,8 +29,12 @@ export function Auth() {
         if (error) throw error
         toast.success("Connexion réussie !")
       }
-    } catch (error: any) {
-      toast.error(error.message || "Une erreur d'authentification est survenue")
+    } catch (error) {
+      if(error instanceof Error) {
+        toast.error(error.message || "Une erreur d'authentification est survenue")
+      } else {
+        toast.error("Une erreur d'authentification est survenue")
+      }
     } finally {
       setLoading(false)
     }
