@@ -59,7 +59,7 @@ export function Dashboard({ onSelectSession }: DashboardProps) {
 
         // Find answers that belong to this session's questions
         const questionIds = new Set(sessionQuestions.map(q => q.id))
-        const answered = (answersData || []).filter(a => questionIds.has(a.question_id)).length
+        const answered = (answersData || []).filter(a => questionIds.has(a.question_id!)).length
 
         return {
           ...session,
@@ -69,7 +69,7 @@ export function Dashboard({ onSelectSession }: DashboardProps) {
       })
 
       setSessions(processedSessions)
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error fetching sessions:', err)
     } finally {
       setLoading(false)
