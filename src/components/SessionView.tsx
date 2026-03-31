@@ -86,7 +86,8 @@ export function SessionView({ sessionId, onBack }: SessionViewProps) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8">
+    <div className={`transition-all duration-500 flex flex-col lg:flex-row items-start gap-8 ${selectedSource ? 'max-w-none' : 'max-w-3xl mx-auto'}`}>
+      <div className={`transition-all duration-500 w-full ${selectedSource ? 'lg:flex-1' : ''} space-y-8`}>
       <div className="flex items-center justify-between pb-2">
         <Button variant="ghost" onClick={onBack} className="gap-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-lg pr-4">
           <ArrowLeft className="h-4 w-4" /> Retour à la liste
@@ -118,7 +119,7 @@ export function SessionView({ sessionId, onBack }: SessionViewProps) {
                 <div className="flex flex-col gap-1 mb-2">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-primary/60">{session?.title || 'Questionnaire'}</span>
                   {session?.description && (
-                    <p className="text-xs text-muted-foreground line-clamp-1">{session.description}</p>
+                    <p className="text-xs text-muted-foreground line-clamp-1">{session?.description}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-3">
@@ -216,52 +217,46 @@ export function SessionView({ sessionId, onBack }: SessionViewProps) {
         </motion.div>
       </AnimatePresence>
 
+      </div>
+      
       <AnimatePresence>
         {selectedSource && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedSource(null)}
-              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 transition-all duration-300"
-            />
-            
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 h-full w-[400px] sm:w-[500px] bg-background border-l shadow-2xl z-[60] flex flex-col"
-            >
-              <div className="flex items-center justify-between p-6 border-b">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                    <BookOpen className="h-5 w-5" />
-                  </div>
-                  <h3 className="font-bold text-lg line-clamp-1">{selectedSource.title}</h3>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            className="w-full lg:w-[400px] xl:w-[500px] bg-card border rounded-2xl shadow-2xl flex flex-col sticky top-24 max-h-[calc(100vh-120px)] border-border/60 overflow-hidden"
+          >
+            <div className="flex items-center justify-between p-5 border-b bg-muted/30">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                  <BookOpen className="h-5 w-5" />
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => setSelectedSource(null)} className="rounded-full h-8 w-8">
-                  <X className="h-4 w-4" />
-                </Button>
+                <h3 className="font-bold text-lg line-clamp-1">{selectedSource?.title}</h3>
               </div>
-              <div className="flex-1 overflow-y-auto p-8 space-y-6">
-                <div className="space-y-4">
-                  <h4 className="text-sm font-bold uppercase tracking-widest text-muted-foreground/60">Contenu de la source</h4>
-                  <div className="prose prose-sm dark:prose-invert max-w-none">
-                    <div className="whitespace-pre-wrap text-base leading-relaxed text-foreground/90 bg-muted/20 p-6 rounded-2xl border border-border/50">
-                      {selectedSource.content}
-                    </div>
+              <Button variant="ghost" size="icon" onClick={() => setSelectedSource(null)} className="rounded-full h-8 w-8 hover:bg-muted transition-colors">
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">Contenu de la source</h4>
+                  <span className="text-[10px] bg-primary/5 text-primary px-2 py-0.5 rounded border border-primary/10">Document</span>
+                </div>
+                <div className="prose prose-sm dark:prose-invert max-w-none">
+                  <div className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90 bg-muted/10 p-5 rounded-xl border border-border/40 font-serif">
+                    {selectedSource?.content}
                   </div>
                 </div>
               </div>
-              <div className="p-6 border-t bg-muted/10">
-                <Button variant="outline" className="w-full rounded-lg" onClick={() => setSelectedSource(null)}>
-                  Fermer le panneau
-                </Button>
-              </div>
-            </motion.div>
-          </>
+            </div>
+            <div className="p-5 border-t bg-muted/5">
+              <Button variant="outline" className="w-full rounded-lg h-10 font-semibold" onClick={() => setSelectedSource(null)}>
+                Fermer la source
+              </Button>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

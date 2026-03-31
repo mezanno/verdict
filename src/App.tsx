@@ -47,7 +47,7 @@ function App() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-10 max-w-5xl">
+      <main className={`container mx-auto px-4 py-10 transition-all duration-500 ${selectedSessionId ? 'max-w-[1600px]' : 'max-w-5xl'}`}>
         {!selectedSessionId ? (
           <Dashboard onSelectSession={setSelectedSessionId} />
         ) : (
